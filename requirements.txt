@@ -1,0 +1,7 @@
+pyautogui
+google-genai
+torch
+torchvision
+numpy
+matplotlib
+timm
