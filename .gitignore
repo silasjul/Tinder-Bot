@@ -4,3 +4,8 @@
 # Images
 *.jpg
 *.png
+
+# Database
+*.db
+
+__pycache__

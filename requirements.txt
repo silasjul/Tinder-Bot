@@ -1,7 +1,12 @@
-pyautogui
-google-genai
+# Image classification with PyTorch
 torch
 torchvision
 numpy
 matplotlib
 timm
+
+# web scraping and automation
+selenium
+
+# message generation
+google-genai
