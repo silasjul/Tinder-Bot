@@ -89,22 +89,52 @@ class BrowserController():
         form.submit()
 
     def is_out_of_swipes(self):
+        return self.is_element_present('/html/body/div[2]/div/div') # checks out_of_swipes element
+    
+    def match_found(self):
+        pass
+
+    def is_element_present(self, xpath):
         temp = self.wait._timeout
         self.wait._timeout = 1
         try:
-            self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div/div')))
+            self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
             self.wait._timeout = temp
             return True
         except selenium.common.exceptions.TimeoutException:
             self.wait._timeout = temp
             return False
     
-    def match_found(self):
-        pass
+    def get_messages(self):
+        messages_container = self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[2]')))
+        time.sleep(1)
+
+        spans = messages_container.find_elements(By.TAG_NAME, 'span')
+
+        window_width = self.driver.execute_script("return window.innerWidth;")
+        messages = []
+        filter = ["", "Sent"]
+
+        for span in spans:
+            if span.text in filter: continue
+
+            if span.location['x'] > window_width / 2:
+                messages.append(f"Me: {span.text}")
+            else:
+                messages.append(f"Her: {span.text}")
+
+        return messages
+
     
 if __name__ == "__main__":
     tinder = BrowserController()
-    tinder.click_like()
-    print(tinder.is_out_of_swipes())
+    tinder.go_url('https://tinder.com/app/messages/61b3a4fe521b470100053a0367e1ebd47fa7552ab991d0d3')
+    messages = tinder.get_messages()
+    print(messages)
+    if messages[-1][:1] == "Me":
+        print("Last message was sent by me")
+    else:
+        print("Last message was sent by her")
+    
     input("Press enter to exit...")
 

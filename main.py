@@ -33,7 +33,7 @@ while True:
         if tinder.is_out_of_swipes():
             tinder.reset()
             can_swipe = False
-        elif tinder.match_found():
+        elif tinder.match_found(): # Fix
             tinder.reset()
             new_matches = True
 
@@ -47,15 +47,21 @@ while True:
     print("Phase 3: Texting existing matches 💌")
     for url in tinder.get_message_urls():
         tinder.go_url(url)
-        # get messages
-        # if new message (i didnt send last message)
-            # if she accepted date
-                # notify me
-            # Send reply
+        message_log = tinder.get_messages()
 
-        # Else if lastmsg over 24h ago
+    if message_log[-1][:1] == "Me":
+        print("Last message was sent by me")
+        # if message was sent over 24h ago
             # Send msg
+    else:
+        print("Last message was sent by her")
+        # if she accepted date
+            # notify me
+        # Send reply
 
+        
+
+    # Phase 4: Sleep
     sleep_timer = random.randint(45, 60)
     print(f"Going to sleep for {sleep_timer} minutes 😴")
     for minute in tqdm(range(sleep_timer), desc="Sleeping Zzz..."):
