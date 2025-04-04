@@ -7,6 +7,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from glob import glob
 from PIL import Image
+from datetime import datetime
+import pytz
+
+class Message():
+    def __init__(self, message, sender, datetime):
+        self.message = message
+        self.sender = sender
+        self.datetime = datetime
+    
+    def __str__(self):
+        return f"{self.sender}: {self.message}"
 
 class BrowserController():
     def __init__(self):
@@ -39,8 +50,6 @@ class BrowserController():
         return urls
     
     def get_message_urls(self):
-        self.reset()
-
         messages_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/div/div/div/div/div/div[2]/div/div[2]/button')))
         messages_btn.click()
 
@@ -106,35 +115,35 @@ class BrowserController():
             return False
     
     def get_messages(self):
-        messages_container = self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[2]')))
+        chat_container = self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[2]')))
         time.sleep(1)
 
-        spans = messages_container.find_elements(By.TAG_NAME, 'span')
-
+        message_containers = chat_container.find_elements(By.XPATH, './div')
         window_width = self.driver.execute_script("return window.innerWidth;")
         messages = []
-        filter = ["", "Sent"]
 
-        for span in spans:
-            if span.text in filter: continue
+        for msg in message_containers:
+            try:
+                span_el = msg.find_element(By.XPATH, './/span')
+                time_el = msg.find_element(By.XPATH, './/time')
+            except selenium.common.exceptions.NoSuchElementException:
+                continue
 
-            if span.location['x'] > window_width / 2:
-                messages.append(f"Me: {span.text}")
-            else:
-                messages.append(f"Her: {span.text}")
+            utc_dt = datetime.fromisoformat(time_el.get_attribute("datetime"))
+            time_zone = pytz.timezone("Europe/Copenhagen")
+            europe_dt = utc_dt.astimezone(time_zone) # convert to local timezone
+
+            msg_x = span_el.location['x']+span_el.size['width']
+            msg = Message(span_el.text, "Me" if msg_x > window_width/2 else "Her", europe_dt)
+            messages.append(msg)
 
         return messages
-
     
 if __name__ == "__main__":
     tinder = BrowserController()
-    tinder.go_url('https://tinder.com/app/messages/61b3a4fe521b470100053a0367e1ebd47fa7552ab991d0d3')
+    matches = tinder.get_message_urls()
+    tinder.go_url(matches[0])
     messages = tinder.get_messages()
-    print(messages)
-    if messages[-1][:1] == "Me":
-        print("Last message was sent by me")
-    else:
-        print("Last message was sent by her")
-    
-    input("Press enter to exit...")
+    print(messages[-1])
+
 

@@ -5,7 +5,7 @@ temp = glob("./data/*/*.png")
 likes = glob("./data/dataset/like/*.png")
 dislikes = glob("./data/dataset/dislike/*.png")
 
-name = "img"
+name = ""
 
 count = 1
 for image in temp:
