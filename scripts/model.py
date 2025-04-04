@@ -47,9 +47,9 @@ ds_folder = "./data/dataset"
 
 ds = TinderWomenDataset(ds_folder, transform=transforms)
 
-train_size = int(0.7 * len(ds))  # 80% for training
+train_size = int(0.8 * len(ds))  # 80% for training
 val_size = int(0.15 * len(ds))   # 15% for validation
-test_size = len(ds) - train_size - val_size  # Remaining 5% for testing
+test_size = len(ds) - train_size - val_size  # Remaining
 
 train_ds, val_ds, test_ds = random_split(ds, [train_size, val_size, test_size])
 
@@ -224,5 +224,5 @@ class HotOrNot():
 
 if __name__ == "__main__":
     # Create model
-    #train_model(epochs=10)
+    train_model(epochs=10)
     test_model(visualize_wrong_predictions=True, visualize_correct_predictions=False)
