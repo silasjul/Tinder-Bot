@@ -69,7 +69,6 @@ while True:
                 new_msg = messages.generate(message_log)
                 tinder.send_message(new_msg)
 
-        
 
     # Phase 4: Sleep
     sleep_timer = random.randint(5, 10) # minutes
