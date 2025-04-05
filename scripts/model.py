@@ -149,7 +149,7 @@ def display_result(image, probabilities, class_names):
 
     plt.tight_layout()
     plt.show(block=False)
-    plt.pause(3)
+    plt.pause(.5)
     plt.close()
     
     return model

@@ -11,9 +11,10 @@ from datetime import datetime
 import pytz
 
 class Message():
-    def __init__(self, message, sender, datetime):
+    def __init__(self, message, sender, name, datetime):
         self.message = message
         self.sender = sender
+        self.name = name
         self.datetime = datetime
     
     def __str__(self):
@@ -33,20 +34,25 @@ class BrowserController():
         # Initialize chrome driver and open Tinder
         self.driver = webdriver.Chrome(options=self.options)
         self.wait = WebDriverWait(self.driver, 10)
+
+        self.dislike_btn = None
+        self.like_btn = None
         
         self.reset()
 
     def click_like(self):
-        like_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[4]/div/div[4]/button')))
-        like_btn.click()
+        self.like_btn.click()
 
     def click_dislike(self):
-        dislike_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[4]/div/div[2]/button')))
-        dislike_btn.click()
+        self.dislike_btn.click()
 
     def get_match_urls(self):
-        matches = self.driver.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/div/div/div/div/div/div[3]/div[1]/ul/li/a')[1:] # First element is ad
-        urls = [match.get_attribute("href") for match in matches]
+        matches = self.driver.find_elements(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/div/div/div/div/div/div[3]/div[1]/ul/li/a')
+        urls = []
+        for match in matches:
+            id = match.get_attribute("id") # only ads has an id
+            if id == "":
+                urls.append(match.get_attribute("href"))
         return urls
     
     def get_message_urls(self):
@@ -86,22 +92,18 @@ class BrowserController():
     def reset(self):
         self.driver.get("https://tinder.com/app/recs")
         self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[2]/div[1]/section/div[2]/div[1]/div'))) # swiping image has loaded
+        self.dislike_btn = self.driver.find_element(By.XPATH, '//*[@id="main-content"]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div[2]/button')
+        self.like_btn = self.driver.find_element(By.XPATH, '//*[@id="main-content"]/div[1]/div/div/div/div[1]/div/div/div[4]/div/div[4]/button')
 
     def send_message(self, message):
         # Enter message
-        text_area = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[3]/form/textarea')
+        text_area = self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[3]/form/textarea')))
         self.driver.execute_script("arguments[0].value = arguments[1];", text_area, message) # Can't insert emojis with send_keys()
         text_area.send_keys(" ") # js doesn't trigger the oninput event, so we need to send a space to trigger it
 
         # Send message
         form = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[3]/form')
         form.submit()
-
-    def is_out_of_swipes(self):
-        return self.is_element_present('/html/body/div[2]/div/div') # checks out_of_swipes element
-    
-    def match_found(self):
-        pass
 
     def is_element_present(self, xpath):
         temp = self.wait._timeout
@@ -120,6 +122,7 @@ class BrowserController():
 
         message_containers = chat_container.find_elements(By.XPATH, './div')
         window_width = self.driver.execute_script("return window.innerWidth;")
+        name = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[2]/div/div/div/div[1]/div/div[1]/h1/span[1]').text
         messages = []
 
         for msg in message_containers:
@@ -133,17 +136,15 @@ class BrowserController():
             time_zone = pytz.timezone("Europe/Copenhagen")
             europe_dt = utc_dt.astimezone(time_zone) # convert to local timezone
 
-            msg_x = span_el.location['x']+span_el.size['width']
-            msg = Message(span_el.text, "Me" if msg_x > window_width/2 else "Her", europe_dt)
+            msg_x = span_el.location['x']+span_el.size['width']/2 # center of the message
+            msg = Message(span_el.text, "Me" if msg_x > window_width/2 else "Her", name, europe_dt)
             messages.append(msg)
 
         return messages
     
 if __name__ == "__main__":
     tinder = BrowserController()
-    matches = tinder.get_message_urls()
-    tinder.go_url(matches[0])
-    messages = tinder.get_messages()
-    print(messages[-1])
+    
+    
 
 
