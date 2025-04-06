@@ -88,6 +88,7 @@ class BrowserController():
     
     def go_url(self, url):
         self.driver.get(url)
+        time.sleep(3)
     
     def reset(self):
         self.driver.get("https://tinder.com/app/recs")
@@ -101,6 +102,8 @@ class BrowserController():
         self.driver.execute_script("arguments[0].value = arguments[1];", text_area, message) # Can't insert emojis with send_keys()
         text_area.send_keys(" ") # js doesn't trigger the oninput event, so we need to send a space to trigger it
 
+        time.sleep(10) # wait a litle before sending in case you dont like the message
+        
         # Send message
         form = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[1]/div/div/div[3]/form')
         form.submit()
@@ -121,7 +124,10 @@ class BrowserController():
         time.sleep(1)
 
         message_containers = chat_container.find_elements(By.XPATH, './div')
-        window_width = self.driver.execute_script("return window.innerWidth;")
+        window_width = chat_container.size['width']
+        window_x = chat_container.location['x']
+        chat_center = window_x + window_width/2
+
         name = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[2]/div/div/div/div[1]/div/div[1]/h1/span[1]').text
         messages = []
 
@@ -137,13 +143,28 @@ class BrowserController():
             europe_dt = utc_dt.astimezone(time_zone) # convert to local timezone
 
             msg_x = span_el.location['x']+span_el.size['width']/2 # center of the message
-            msg = Message(span_el.text, "Me" if msg_x > window_width/2 else "Her", name, europe_dt)
+            msg = Message(span_el.text, "Me" if msg_x > chat_center else "Her", name, europe_dt)
             messages.append(msg)
 
         return messages
     
+    def get_bio(self):
+        try:
+            bio = self.wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/div[2]/div/div/div/div[2]/div[2]/div/div[2]/div/div[2]')))
+            # Scroll to the element
+            self.driver.execute_script("arguments[0].scrollIntoView(true);", bio)
+            time.sleep(1)
+
+            return bio.text
+        except selenium.common.exceptions.TimeoutException:
+            print("Bio not found")
+
+    
 if __name__ == "__main__":
     tinder = BrowserController()
+    tinder.go_url("https://tinder.com/app/messages/66b13b91aa9452010022853567e1ebd47fa7552ab991d0d3")
+    bio = tinder.get_bio()
+    print(bio)
     
     
 

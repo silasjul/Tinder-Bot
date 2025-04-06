@@ -149,7 +149,7 @@ def display_result(image, probabilities, class_names):
 
     plt.tight_layout()
     plt.show(block=False)
-    plt.pause(.5)
+    plt.pause(1)
     plt.close()
     
     return model
@@ -223,6 +223,7 @@ class HotOrNot():
     
 
 if __name__ == "__main__":
-    # Create model
-    train_model(epochs=10)
+    # Create/Overwrite model
+    train_model(epochs=5)
+    # Test model
     test_model(visualize_wrong_predictions=True, visualize_correct_predictions=False)

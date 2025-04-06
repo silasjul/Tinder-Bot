@@ -8,24 +8,23 @@ import selenium
 import time
 
 tinder = BrowserController()
-classifier = HotOrNot(visualize_predictions=False)
+classifier = HotOrNot(visualize_predictions=True)
 messages = MessageGenerator()
-
-opener = """Hvis jeg var en T-rex, ville jeg prøve at kramme dig med mine små arme 
-    også ligge mig ned og græde fordi jeg ikke kunne 
-    modstå din lækre menneskeduft og spise dig"""
 
 def sleep_random(min=0.5, max=1):
     time.sleep((random.random() * min) + max-min)
 
+def get_time_swiped(start_time):
+    return (time.time() - start_time) / 60
+
 while True:
-    time_to_swipe = 1 # swipe time
+    time_to_swipe = 0.0 # swipe time minutes
     time_start = time.time()
 
     # Phase 1: Swiping
     print("Phase 1: Let the swiping begin 🫷")
-    while (time.time() - time_start) / 60 < time_to_swipe:
-        print(f"Status: {time_to_swipe - (time.time() - time_start) / 60:.2f} minutes left")
+    while get_time_swiped(time_start) < time_to_swipe:
+        print(f"Status: {time_to_swipe - get_time_swiped(time_start):.2f} minutes left")
         
         image_path = tinder.get_girl_img()
         prediction, confidence = classifier.predict_image(image_path)
@@ -43,8 +42,10 @@ while True:
     print("Phase 2: Texting new matches 📝")
     new_matches = tinder.get_match_urls()
     if (len(new_matches) > 0):
-        for url in new_matches():
+        for url in new_matches:
             tinder.go_url(url)
+            bio = tinder.get_bio()
+            opener = messages.generate_opener()
             tinder.send_message(opener)
             sleep_random(1, 2)
         tinder.reset()
@@ -56,16 +57,17 @@ while True:
     for url in tinder.get_message_urls():
         tinder.go_url(url)
         message_log = tinder.get_messages()
+        message_log_str = [str(msg) for msg in message_log]
+        last_msg = message_log[-1]
 
-        last_msg: Message = tinder.get_messages()[-1]
         if last_msg.sender == "Her":
             print("Status: new message detected")
-            date_accepted = messages.analyse_message(str(last_msg))
+            date_accepted = messages.analyse_message(last_msg)
             if date_accepted:
                 print("HURRAY! She accepted the date! Go text her the details: ", url)
             else:
                 print("Status: sending response...")
-                new_msg = messages.generate(message_log)
+                new_msg = messages.generate(message_log_str)
                 tinder.send_message(new_msg)
                 sleep_random(1, 2)
         else:
