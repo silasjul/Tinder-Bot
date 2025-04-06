@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-me = 'Im a 23 yo software student at SDU. Im physically active and my hobbies are playing guitar, hiking and indoor bouldering/climbing)'
-
 class MessageGenerator():
 
     def __init__(self):
@@ -26,6 +24,7 @@ class MessageGenerator():
 
             **IMPORTANT:** Generate *only* the Danish message text itself. 
             * Do NOT include any explanation or commentary.
+            * Do NOT include characters like *, / or @ in the message.
             * Do NOT include any introductory phrases like "Here is a message you could send:".
             * Do NOT offer multiple options.
             * The output should be the raw message string ready to be copied and pasted.
@@ -34,18 +33,20 @@ class MessageGenerator():
         return response.text
     
     def generate_opener(self, bio):
-        bio = f'Her bio: {bio}' if bio else ''
+        if not bio:
+            return 'Hvis jeg var en T-rex, ville jeg prøve at kramme dig med mine små arme også ligge mig ned og græde fordi jeg ikke kunne modstå din lækre menneskeduft og spise dig'
 
         prompt = f"""
-            {me} 
-            and a girl (Her: Pretty girl I like. {bio}):
+            Her: Pretty girl I like on tinder. Her bio: {bio}):
 
-            Your task is to generate a conversation starting text-message in Danish that I can send.
+            Your task is to generate a flirty conversation starting text-message in Danish that I can send.
 
             **IMPORTANT:** Generate *only* the Danish message text itself. 
             * Do NOT include any explanation or commentary.
             * Do NOT include characters like *, / or @ in the message.
             * Do NOT include any introductory phrases like "Here is a message you could send:".
+            * Do NOT use english words or phrases in the message.
+            * Do NOT ask her on a date
             * Do NOT offer multiple options.
             * The output should be the raw message string ready to be copied and pasted.
         """
@@ -80,4 +81,4 @@ if __name__ == "__main__":
     bio_example = 'Jeg laver fantastisk morgenmad og aftensmad, hvis du kan lide havregryn, og over-/underkogt pasta med ketchup👩‍🍳'
 
     message = MessageGenerator()
-    print(message.generate_opener(''))
+    print(message.generate_opener(bio_example))
