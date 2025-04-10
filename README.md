@@ -20,7 +20,7 @@ Automated Tinder Bot for swiping and messaging
 
 ## About
 
-The Tinder Bot is an automated tool designed to interact with the Tinder platform. It simplifies repetitive tasks such as swiping, messaging, and profile management, providing a streamlined experience for lazy users.
+The Tinder Bot is an automated tool designed to interact with the Tinder platform. It simplifies repetitive tasks such as swiping, messaging, thinking of smart openers and date setups, providing a streamlined experience for lazy fucks.
 
 ## Main features
 
