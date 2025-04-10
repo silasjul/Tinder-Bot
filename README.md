@@ -32,7 +32,7 @@ The Tinder Bot is an automated tool designed to interact with the Tinder platfor
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/Tinder-Bot.git
+    git clone [https://github.com/your-username/Tinder-Bot.git](https://github.com/silasjul/Tinder-Bot.git)
     ```
 2. Navigate to the project directory:
     ```bash
