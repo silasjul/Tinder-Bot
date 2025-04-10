@@ -24,7 +24,7 @@ The Tinder Bot is an automated tool designed to interact with the Tinder platfor
 
 ## Main features
 
--   **Automated Swiping**: Uses Efficientnet_b0 with a custom classifier for swiping left or right.
+-   **Automated Swiping**: Uses Efficientnet_b0 with a custom classifier for swiping.
 -   **Auto Messaging**: Sends AI-generated messages with Gemini API.
 -   **Auto Date Setup**: Sets up dates based on your date and time preferences.
 
