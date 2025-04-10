@@ -1,11 +1,9 @@
-# Environment variables
+# env variables
 .env
 
 # Images
-*.jpg
-*.png
+data/**/*.jpg
+data/**/*.png
 
-# Database
-*.db
-
+# Other
 __pycache__
