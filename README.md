@@ -51,7 +51,7 @@ The bot requires a `.env` file to store sensitive information. Below is an examp
 # API key for Gemini AI (used for generating messages)
 GEMINI_API_KEY=your-gemini-api-key
 
-# Path to the Chrome user profile for Selenium
+# Path to the Chrome user profile for Selenium (so it has access to your password)
 CHROME_PROFILE_PATH="C:\Users\your-username\AppData\Local\Google\Chrome\User Data"
 ```
 
