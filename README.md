@@ -74,7 +74,3 @@ CHROME_PROFILE_PATH="C:\Users\your-username\AppData\Local\Google\Chrome\User Dat
 ## Disclaimer
 
 This project is for educational purposes only. Use responsibly and ensure compliance with Tinder's terms of service.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
