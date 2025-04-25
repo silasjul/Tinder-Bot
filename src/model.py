@@ -47,9 +47,9 @@ ds_folder = "./data/dataset"
 
 ds = TinderWomenDataset(ds_folder, transform=transforms)
 
-train_size = int(0.8 * len(ds))  # 80% for training
+train_size = int(0.70 * len(ds))  # 70% for training
 val_size = int(0.15 * len(ds))   # 15% for validation
-test_size = len(ds) - train_size - val_size  # Remaining
+test_size = len(ds) - train_size - val_size  # 15% for testing
 
 train_ds, val_ds, test_ds = random_split(ds, [train_size, val_size, test_size])
 
@@ -81,7 +81,7 @@ class HotOrNotClassifier(nn.Module):
 
 model = HotOrNotClassifier().to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001)
+optimizer = optim.Adam(model.parameters(), lr=0.00001)
 
 train_losses, val_losses = [], []
 
@@ -134,7 +134,7 @@ model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 
-def display_result(image, probabilities, class_names):
+def display_result(image, probabilities, class_names, timeout=0.5):
     fig, axarr = plt.subplots(1, 2, figsize=(14, 7))
             
     # Display image
@@ -149,7 +149,7 @@ def display_result(image, probabilities, class_names):
 
     plt.tight_layout()
     plt.show(block=False)
-    plt.pause(.5)
+    plt.pause(timeout)
     plt.close()
     
     return model
@@ -177,12 +177,12 @@ def test_model(visualize_wrong_predictions=False, visualize_correct_predictions=
 
                 if visualize_wrong_predictions:
                     image = image_tensor.squeeze().permute(1, 2, 0).cpu()
-                    display_result(image, probabilities, class_names)
+                    display_result(image, probabilities, class_names, timeout=2)
             else:
                 correct_predictions_count += 1
                 if visualize_correct_predictions:
                     image = image_tensor.squeeze().permute(1, 2, 0).cpu()
-                    display_result(image, probabilities, class_names)
+                    display_result(image, probabilities, class_names, timeout=2)
 
     acuracy = correct_predictions_count / (correct_predictions_count + wrong_predictions_count) * 100
     avr_confidence = sum(confidence_list) / len(confidence_list)
@@ -224,6 +224,6 @@ class HotOrNot():
 
 if __name__ == "__main__":
     # Create/Overwrite model
-    train_model(epochs=8)
+    train_model(epochs=5)
     # Test model
     test_model(visualize_wrong_predictions=True, visualize_correct_predictions=False)

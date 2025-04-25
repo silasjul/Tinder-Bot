@@ -10,10 +10,8 @@ with open("config.json", "r") as config_file:
     config = json.load(config_file)
 
 class MessageGenerator():
-
     def __init__(self):
         self.client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
-
         self.model = "gemini-2.5-pro-exp-03-25"
         self.config = types.GenerateContentConfig(
             system_instruction="You are an expert dating coach that specialize in texting and online dating.",
@@ -115,4 +113,4 @@ if __name__ == "__main__":
     bio_example = 'Jeg laver fantastisk morgenmad og aftensmad, hvis du kan lide havregryn, og over-/underkogt pasta med ketchup👩‍🍳'
 
     message = MessageGenerator()
-    print(message.generate_date(example_log))
+    print(message.generate_opener(bio_example))
