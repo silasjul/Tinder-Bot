@@ -1,16 +1,13 @@
 <div align="center">
 <pre>
-,---------. .-./`) ,---.   .--. ______         .-''-.  .-------.             _______       ,-----.  ,---------.
-\          \\ .-.')|    \  |  ||    _ `''.   .'_ _   \ |  _ _   \           \  ____  \   .'  .-,  '.\          \
- `--.  ,---'/ `-' \|  ,  \ |  || _ | ) _  \ / ( ` )   '| ( ' )  |           | |    \ |  / ,-.|  \ _ \`--.  ,---'
-    |   \    `-'`"`|  |\_ \|  ||( ''_'  ) |. (_ o _)  ||(_ o _) /           | |____/ / ;  \  '_ /  | :  |   \
-    :_ _:    .---. |  _( )_\  || . (_) `. ||  (_,_)___|| (_,_).' __         |   _ _ '. |  _`,/ \ _/  |  :_ _:
-    (_I_)    |   | | (_ o _)  ||(_    ._) ''  \   .---.|  |\ \  |  |        |  ( ' )  \: (  '\_/ \   ;  (_I_)
-   (_(=)_)   |   | |  (_,_)\  ||  (_.\.' /  \  `-'    /|  | \ `'   /        | (_{;}_) | \ `"/  \  ) /  (_(=)_)
-    (_I_)    |   | |  |    |  ||       .'    \       / |  |  \    /         |  (_,_)  /  '. \_/``".'    (_I_)
-    '---'    '---' '--'    '--''-----'`       `'-..-'  ''-'   `'-'          /_______.'     '-----'      '---'
-----------------------------------------------------------------------------------------------------------------
-Automated Tinder Bot for swiping, messaging, and profile management
+████████╗██╗███╗   ██╗██████╗ ███████╗██████╗     ██████╗  ██████╗ ████████╗
+╚══██╔══╝██║████╗  ██║██╔══██╗██╔════╝██╔══██╗    ██╔══██╗██╔═══██╗╚══██╔══╝
+   ██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝    ██████╔╝██║   ██║   ██║   
+   ██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗    ██╔══██╗██║   ██║   ██║   
+   ██║   ██║██║ ╚████║██████╔╝███████╗██║  ██║    ██████╔╝╚██████╔╝   ██║   
+   ╚═╝   ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝    ╚═════╝  ╚═════╝    ╚═╝   
+----------------------------------------------------------------------------
+Automated Tinder Bot for swiping and messaging
 </pre>
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
@@ -20,11 +17,11 @@ Automated Tinder Bot for swiping, messaging, and profile management
 
 ## About
 
-The Tinder Bot is an automated tool designed to interact with the Tinder platform. It simplifies repetitive tasks such as swiping, messaging, and profile management, providing a streamlined experience for lazy users.
+The Tinder Bot is a script designed to interact with the Tinder platform. It simplifies repetitive tasks such as swiping, messaging, thinking of smart openers and date setups, providing a streamlined experience for lazy fucks.
 
 ## Main features
 
--   **Automated Swiping**: Uses Efficientnet_b0 with a custom classifier for swiping left or right.
+-   **Automated Swiping**: Uses Efficientnet_b0 with a custom classifier for swiping.
 -   **Auto Messaging**: Sends AI-generated messages with Gemini API.
 -   **Auto Date Setup**: Sets up dates based on your date and time preferences.
 
@@ -32,7 +29,7 @@ The Tinder Bot is an automated tool designed to interact with the Tinder platfor
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/Tinder-Bot.git
+    git clone https://github.com/silasjul/Tinder-Bot.git
     ```
 2. Navigate to the project directory:
     ```bash
@@ -51,7 +48,7 @@ The bot requires a `.env` file to store sensitive information. Below is an examp
 # API key for Gemini AI (used for generating messages)
 GEMINI_API_KEY=your-gemini-api-key
 
-# Path to the Chrome user profile for Selenium
+# Path to the Chrome user profile for Selenium (so it has access to your password)
 CHROME_PROFILE_PATH="C:\Users\your-username\AppData\Local\Google\Chrome\User Data"
 ```
 
@@ -77,7 +74,3 @@ CHROME_PROFILE_PATH="C:\Users\your-username\AppData\Local\Google\Chrome\User Dat
 ## Disclaimer
 
 This project is for educational purposes only. Use responsibly and ensure compliance with Tinder's terms of service.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
